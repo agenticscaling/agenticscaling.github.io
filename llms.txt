@@ -1,0 +1,20 @@
+# ILLUME — The Science of Agentic Scaling
+
+> ILLUME builds the predictive science of multi-agent AI: scaling laws that classify any agent team into hard-ceiling, sublinear, or linear regimes, predicting when adding agents helps, when it fails, and what it costs in tokens and energy.
+
+The site presents peer-reviewed research on the Ringelmann effect in multi-agent LLM systems — a two-parameter scaling law for effective team size — and a controlled study of multi-agent debate failure modes. The goal is to move multi-agent AI from heuristic engineering to a predictive physics of interaction.
+
+## Research
+
+- [The Ringelmann Effect in Multi-Agent LLM Systems: A Scaling Law for Effective Team Size](https://arxiv.org/abs/2606.02646): A two-parameter scaling law that classifies any agent configuration into hard-ceiling, sublinear, or linear regimes, validated across 38 model × task × condition cells. (arXiv:2606.02646)
+- [The Cost of Consensus: Isolated Self-Correction Prevails Over Unguided Homogeneous Multi-Agent Debate](https://dl.acm.org/doi/10.1145/3786335.3813137): A controlled study of N=10 homogeneous debate teams across three open-weight models on GSM-Hard and MMLU-Hard, decomposing debate failure into three mechanistic pathways. CAIS '26 Industry Spotlight.
+
+## Key findings
+
+- Sycophantic conformity: agents adopt the majority answer up to 85.5% of the time.
+- Contextual fragility: correct reasoning is destabilized at rates up to 70%.
+- Debate costs 2.1–3.4× more tokens for equal or lower accuracy.
+
+## Contact
+
+- Email: sensorlab.jsi@gmail.com
