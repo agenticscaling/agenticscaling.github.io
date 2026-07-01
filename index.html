@@ -27,7 +27,7 @@
 <meta name="twitter:title" content="ILLUME — The Science of Agentic Scaling" />
 <meta name="twitter:description" content="The predictive science of multi-agent AI: when more agents help, when they fail, how they scale, and what they cost in energy." />
 <meta name="twitter:image" content="https://www.agenticscaling.ai/assets/preview.png" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%234f46e5' stroke-width='7'/%3E%3Ccircle cx='50' cy='50' r='9' fill='%234f46e5'/%3E%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%2326619C' stroke-width='7'/%3E%3Ccircle cx='50' cy='50' r='9' fill='%2326619C'/%3E%3C/svg%3E" />
 <!-- Structured data (schema.org / JSON-LD) — helps Google + AI parse the site -->
 <script type="application/ld+json">
 {
@@ -79,9 +79,9 @@
     --muted:#646b85;
     --line:#e8eaf1;
     --line-2:#dfe2ec;
-    --brand:#4f46e5;     /* indigo */
-    --brand-2:#7c6cf0;
-    --brand-soft:#eef0fe;
+    --brand:#26619C;     /* lapis lazuli */
+    --brand-2:#4d8fd6;
+    --brand-soft:#e8f0fa;
     --accent:#0ea5a4;    /* teal, sparing */
     --shadow:0 1px 2px rgba(16,18,34,.04),0 8px 30px rgba(16,18,34,.06);
     --shadow-lg:0 4px 12px rgba(16,18,34,.06),0 24px 60px rgba(16,18,34,.10);
@@ -104,11 +104,11 @@
   header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.8);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
   nav{display:flex;align-items:center;justify-content:space-between;height:68px}
   .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;letter-spacing:-.3px}
-  .brand .mark{width:22px;height:22px;border-radius:7px;background:linear-gradient(140deg,var(--brand),var(--brand-2));box-shadow:0 2px 8px rgba(79,70,229,.35)}
+  .brand .mark{width:22px;height:22px;border-radius:7px;background:linear-gradient(140deg,var(--brand),var(--brand-2));box-shadow:0 2px 8px rgba(38,97,156,.35)}
   .navlinks{display:flex;gap:30px;align-items:center;font-size:14.5px;color:var(--muted)}
   .navlinks a:not(.btn):hover{color:var(--ink)}
-  .btn{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14.5px;padding:10px 18px;border-radius:10px;background:var(--brand);color:#fff;border:1px solid var(--brand);transition:background .15s ease,transform .15s ease,box-shadow .15s ease;box-shadow:0 1px 2px rgba(79,70,229,.25)}
-  .btn:hover{background:#4338ca;transform:translateY(-1px);box-shadow:0 6px 18px rgba(79,70,229,.30)}
+  .btn{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14.5px;padding:10px 18px;border-radius:10px;background:var(--brand);color:#fff;border:1px solid var(--brand);transition:background .15s ease,transform .15s ease,box-shadow .15s ease;box-shadow:0 1px 2px rgba(38,97,156,.25)}
+  .btn:hover{background:#1e4e7e;transform:translateY(-1px);box-shadow:0 6px 18px rgba(38,97,156,.30)}
   .btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line-2);box-shadow:var(--shadow)}
   .btn.ghost:hover{background:var(--bg-soft);border-color:var(--brand)}
   @media(max-width:820px){.navlinks a:not(.btn){display:none}}
@@ -116,7 +116,7 @@
   /* hero */
   .hero{position:relative;padding:96px 0 60px;text-align:center;overflow:hidden}
   .hero::before{content:"";position:absolute;left:50%;top:-180px;width:900px;height:520px;transform:translateX(-50%);
-    background:radial-gradient(closest-side,rgba(124,108,240,.18),transparent 70%);z-index:0}
+    background:radial-gradient(closest-side,rgba(77,143,214,.20),transparent 70%);z-index:0}
   .hero .wrap{position:relative;z-index:1}
   .chip{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--ink-2);background:#fff;border:1px solid var(--line-2);padding:6px 14px;border-radius:999px;box-shadow:var(--shadow);margin-bottom:30px}
   .chip .d{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(14,165,164,.15)}
@@ -130,7 +130,7 @@
   .scene-steps{display:flex;gap:8px;flex-wrap:wrap}
   .scene-step{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--muted);background:var(--bg-soft);border:1px solid var(--line);padding:6px 11px;border-radius:999px;transition:color .3s,background .3s,border-color .3s}
   .scene-step .dot{width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:700;background:var(--line-2);color:#fff;transition:background .3s}
-  .scene-step.on{color:var(--brand);background:var(--brand-soft);border-color:#dcdcfb}
+  .scene-step.on{color:var(--brand);background:var(--brand-soft);border-color:#cddcf1}
   .scene-step.on .dot{background:var(--brand)}
   .scene-cap{flex:1;min-width:200px;font-size:13.5px;color:var(--ink-2)}
   .scene-cap b{color:var(--brand);font-weight:650}
@@ -204,11 +204,11 @@
   .paper ul{list-style:none;margin:18px 0 0;display:flex;flex-direction:column;gap:11px}
   .paper li{font-size:14.5px;color:var(--ink-2);padding-left:26px;position:relative}
   .paper li::before{content:"";position:absolute;left:0;top:7px;width:14px;height:14px;border-radius:50%;background:var(--brand-soft);
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 6L9 17l-5-5' fill='none' stroke='%234f46e5' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-size:11px;background-repeat:no-repeat;background-position:center}
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 6L9 17l-5-5' fill='none' stroke='%2326619C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-size:11px;background-repeat:no-repeat;background-position:center}
   .paper .by{margin-top:auto;padding-top:20px;font-size:13px;color:var(--muted)}
   .paper .venuerow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   .paper .spot{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand-2));padding:5px 11px;border-radius:7px}
-  .paper .spotlight{margin-top:18px;padding:14px 16px;border-radius:12px;font-size:14px;line-height:1.5;color:var(--ink-2);background:var(--brand-soft);border:1px solid #dcdcfb}
+  .paper .spotlight{margin-top:18px;padding:14px 16px;border-radius:12px;font-size:14px;line-height:1.5;color:var(--ink-2);background:var(--brand-soft);border:1px solid #cddcf1}
   .paper .spotlight strong{color:var(--brand);font-weight:650}
   @media(max-width:820px){.papers{grid-template-columns:1fr}}
 
@@ -222,7 +222,7 @@
 
   /* final */
   .final{padding:0 0 96px}
-  .final .box{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(150deg,#4f46e5,#7c6cf0);color:#fff;text-align:center;padding:72px 28px;box-shadow:var(--shadow-lg)}
+  .final .box{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(150deg,#26619C,#4d8fd6);color:#fff;text-align:center;padding:72px 28px;box-shadow:var(--shadow-lg)}
   .final .box::after{content:"";position:absolute;right:-120px;bottom:-160px;width:420px;height:420px;border-radius:50%;background:rgba(255,255,255,.10)}
   .final h2{color:#fff;max-width:20ch;margin:0 auto}
   .final p{color:rgba(255,255,255,.92);font-size:18px;max-width:50ch;margin:16px auto 30px}
@@ -519,9 +519,9 @@
 
     // pilot band (N<=5), hidden
     refs.band = add(svg,"rect",{ class:"fade", x:sx(1), y:yt, width:sx(5)-sx(1), height:yb-yt,
-      fill:"#eef0fe", stroke:"#dcdcfb", "stroke-width":1 });
+      fill:"#e8f0fa", stroke:"#cddcf1", "stroke-width":1 });
     refs.bandLbl = add(svg,"text",{ class:"fade", x:(sx(1)+sx(5))/2, y:sy(21),
-      "text-anchor":"middle", "font-size":11, "font-weight":700, fill:"#4f46e5" });
+      "text-anchor":"middle", "font-size":11, "font-weight":700, fill:"#26619C" });
     refs.bandLbl.textContent = "pilot · N ≤ 5";
 
     // axes spines
