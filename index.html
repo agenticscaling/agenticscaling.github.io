@@ -505,7 +505,7 @@
   // ---- build the static chart, return animatable refs ------------
   function build(){
     while(svg.firstChild) svg.removeChild(svg.firstChild);
-    var refs = { curvesP:[], curvesE:[], mkP:[], mkE:[], annos:[] };
+    var refs = { curves:[], mkP:[], mkE:[], annos:[] };
 
     // pink "departure" region (below the diagonal), hidden
     refs.region = add(svg,"polygon",{ class:"fade",
@@ -559,14 +559,13 @@
     refs.departLbl.appendChild(el("tspan",{x:sx(15.5),text:"departure from"}));
     refs.departLbl.appendChild(el("tspan",{x:sx(15.5),dy:13,text:"independent-voter ideal"}));
 
-    // curves (split at N=5) + markers + annotations, per condition
+    // continuous fitted curves (N = 1..30) + markers + annotations
     ORDER.forEach(function(key){
       var c = COND[key];
-      var p1 = add(svg,"path",{ class:"draw", d:curveD(c.c,c.beta,1,5),
+      var p = add(svg,"path",{ class:"draw", d:curveD(c.c,c.beta,1,30),
         fill:"none", stroke:c.color, "stroke-width":2 });
-      var p2 = add(svg,"path",{ class:"draw", d:curveD(c.c,c.beta,5,30),
-        fill:"none", stroke:c.color, "stroke-width":2 });
-      refs.curvesP.push(p1); refs.curvesE.push(p2);
+      primePath(p); // hide until step 2 draws it
+      refs.curves.push(p);
     });
     // markers on top of curves
     ORDER.forEach(function(key){
@@ -609,12 +608,16 @@
   function clearTimers(){ timers.forEach(clearTimeout); timers=[]; }
   function at(ms, fn){ timers.push(setTimeout(fn, ms)); }
   function showFade(e){ if(e) e.classList.add("show"); }
-  function drawPath(e){
+  function primePath(e){ // hide a path (collapsed to zero visible length)
     if(!e) return;
     var len = e.getTotalLength();
-    e.style.strokeDasharray = e.getAttribute("stroke-dasharray") ? null : len;
+    if(!e.getAttribute("stroke-dasharray")) e.style.strokeDasharray = len;
     e.style.strokeDashoffset = len;
-    e.getBoundingClientRect(); // reflow
+  }
+  function drawPath(e){
+    if(!e) return;
+    primePath(e);
+    e.getBoundingClientRect(); // reflow so the transition runs
     e.style.strokeDashoffset = 0;
   }
   function showMarker(m){
@@ -631,7 +634,7 @@
     showFade(refs.region); showFade(refs.band); showFade(refs.bandLbl);
     showFade(refs.diagLbl); showFade(refs.departLbl);
     refs.diag.style.strokeDashoffset = 0;
-    refs.curvesP.concat(refs.curvesE).forEach(function(p){ p.style.strokeDashoffset = 0; });
+    refs.curves.forEach(function(p){ p.style.strokeDashoffset = 0; });
     refs.mkP.concat(refs.mkE).forEach(showMarker);
     refs.annos.forEach(showFade);
     setSteps(3);
@@ -647,35 +650,33 @@
       return;
     }
 
+    // reference context first (axes/diagonal/region/band)
     setSteps(1);
     setCap("A full 30-agent sweep is expensive. We start with a cheap pilot.");
-
     at(250, function(){ drawPath(refs.diag); showFade(refs.diagLbl); });
-    at(650, function(){ showFade(refs.region); });
-    at(900, function(){ showFade(refs.band); showFade(refs.bandLbl); });
-    at(1150, function(){
-      setCap("Run the experiment only up to <b>5 agents</b> — measure effective team size.");
-      refs.mkP.forEach(function(m,i){ at(i*110, function(){ showMarker(m); }); });
+    at(550, function(){ showFade(refs.region); showFade(refs.band); showFade(refs.bandLbl); });
+
+    // 1) draw the pilot points (N <= 5)
+    at(900, function(){
+      setCap("Run the experiment only up to <b>5 agents</b> — measure the points.");
+      refs.mkP.forEach(function(m,i){ at(i*120, function(){ showMarker(m); }); });
     });
 
-    at(2350, function(){
+    // 2) draw the continuous fitted lines (N = 1..30)
+    at(2100, function(){
       setSteps(2);
-      setCap("Fit the law <b>Nₑᶠᶠ = N / (1 + c(N−1)N⁻ᵝ)</b> — just two parameters.");
-      refs.curvesP.forEach(drawPath);
+      setCap("Fit the law <b>Nₑᶠᶠ = N / (1 + c(N−1)N⁻ᵝ)</b> and draw the continuous curves.");
+      refs.curves.forEach(drawPath);
     });
 
-    at(3550, function(){
+    // 3) add the remaining points for 5+ agents (N = 7..30)
+    at(3450, function(){
       setSteps(3);
-      setCap("Extrapolate the fit out to <b>N = 30</b> — no large run required.");
-      refs.curvesE.forEach(drawPath);
+      setCap("Add the larger runs (<b>N = 7…30</b>) — they land right on the predicted curves.");
+      refs.mkE.forEach(function(m,i){ at(i*110, function(){ showMarker(m); }); });
     });
 
-    at(4650, function(){
-      setCap("Held-out runs at <b>N = 7…30</b> land right on the predicted curves.");
-      refs.mkE.forEach(function(m,i){ at(i*100, function(){ showMarker(m); }); });
-    });
-
-    at(5750, function(){
+    at(4700, function(){
       refs.annos.forEach(showFade);
       showFade(refs.departLbl);
       setCap("Self-correction saturates near <b>6 of 30</b> effective agents; debate collapses below <b>2</b>.");
