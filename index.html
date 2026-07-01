@@ -28,6 +28,48 @@
 <meta name="twitter:description" content="The predictive science of multi-agent AI: when more agents help, when they fail, how they scale, and what they cost in energy." />
 <meta name="twitter:image" content="https://www.agenticscaling.ai/assets/preview.png" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%234f46e5' stroke-width='7'/%3E%3Ccircle cx='50' cy='50' r='9' fill='%234f46e5'/%3E%3C/svg%3E" />
+<!-- Structured data (schema.org / JSON-LD) — helps Google + AI parse the site -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.agenticscaling.ai/#org",
+      "name": "ILLUME",
+      "description": "The predictive science of agentic scaling — scaling laws for multi-agent AI.",
+      "url": "https://www.agenticscaling.ai/",
+      "email": "sensorlab.jsi@gmail.com",
+      "parentOrganization": { "@type": "Organization", "name": "SensorLab, Jožef Stefan Institute" }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.agenticscaling.ai/#website",
+      "name": "ILLUME — The Science of Agentic Scaling",
+      "url": "https://www.agenticscaling.ai/",
+      "publisher": { "@id": "https://www.agenticscaling.ai/#org" }
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "headline": "The Ringelmann Effect in Multi-Agent LLM Systems: A Scaling Law for Effective Team Size",
+      "url": "https://arxiv.org/abs/2606.02646",
+      "sameAs": "https://arxiv.org/abs/2606.02646",
+      "identifier": "arXiv:2606.02646",
+      "author": { "@id": "https://www.agenticscaling.ai/#org" },
+      "publisher": { "@id": "https://www.agenticscaling.ai/#org" }
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "headline": "The Cost of Consensus: Isolated Self-Correction Prevails Over Unguided Homogeneous Multi-Agent Debate",
+      "url": "https://dl.acm.org/doi/10.1145/3786335.3813137",
+      "sameAs": "https://dl.acm.org/doi/10.1145/3786335.3813137",
+      "identifier": "doi:10.1145/3786335.3813137",
+      "author": { "@id": "https://www.agenticscaling.ai/#org" },
+      "publisher": { "@id": "https://www.agenticscaling.ai/#org" }
+    }
+  ]
+}
+</script>
 <style>
   :root{
     --bg:#ffffff;
@@ -81,6 +123,29 @@
   h1{font-size:clamp(40px,6.2vw,68px);line-height:1.05;letter-spacing:-2px;font-weight:700;max-width:16ch;margin:0 auto}
   .lede{font-size:clamp(17px,2.1vw,20px);color:var(--muted);max-width:60ch;margin:26px auto 0}
   .cta{display:flex;gap:13px;justify-content:center;margin-top:36px;flex-wrap:wrap}
+
+  /* animated scaling-law figure (hero) */
+  .scene{position:relative;margin:48px auto 6px;max-width:860px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-lg);padding:20px 22px 12px;text-align:left}
+  .scene-head{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;margin-bottom:12px}
+  .scene-steps{display:flex;gap:8px;flex-wrap:wrap}
+  .scene-step{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--muted);background:var(--bg-soft);border:1px solid var(--line);padding:6px 11px;border-radius:999px;transition:color .3s,background .3s,border-color .3s}
+  .scene-step .dot{width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:700;background:var(--line-2);color:#fff;transition:background .3s}
+  .scene-step.on{color:var(--brand);background:var(--brand-soft);border-color:#dcdcfb}
+  .scene-step.on .dot{background:var(--brand)}
+  .scene-cap{flex:1;min-width:200px;font-size:13.5px;color:var(--ink-2)}
+  .scene-cap b{color:var(--brand);font-weight:650}
+  .scene-replay{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--muted);background:#fff;border:1px solid var(--line-2);padding:7px 12px;border-radius:9px;cursor:pointer;transition:color .15s,border-color .15s}
+  .scene-replay:hover{color:var(--brand);border-color:var(--brand)}
+  .scene-replay svg{width:14px;height:14px;stroke:currentColor;stroke-width:2;fill:none}
+  #lawviz{width:100%;height:auto;display:block}
+  #lawviz text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif}
+  #lawviz .fade{opacity:0;transition:opacity .55s ease}
+  #lawviz .fade.show{opacity:1}
+  #lawviz .draw{transition:stroke-dashoffset .9s ease}
+  #lawviz .mk{opacity:0;transition:opacity .3s ease,transform .42s cubic-bezier(.2,1.5,.45,1)}
+  #lawviz .mk.show{opacity:1}
+  #lawviz .dia,#lawviz .mk{transform-box:fill-box;transform-origin:center}
+  @media(max-width:560px){.scene-cap{order:3;flex-basis:100%}.scene-replay{margin-left:0}}
 
   /* stat strip */
   .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:72px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
@@ -201,6 +266,22 @@
     <div class="cta">
       <a class="btn" href="#research">Read the research</a>
       <a class="btn ghost" href="#science">How it works</a>
+    </div>
+
+    <div class="scene" aria-label="Animated scaling law: a 5-agent pilot predicts a 30-agent team">
+      <div class="scene-head">
+        <div class="scene-steps">
+          <span class="scene-step" data-step="1"><span class="dot">1</span> Run a 5-agent pilot</span>
+          <span class="scene-step" data-step="2"><span class="dot">2</span> Fit the scaling law</span>
+          <span class="scene-step" data-step="3"><span class="dot">3</span> Extrapolate to 30</span>
+        </div>
+        <button class="scene-replay" type="button" id="sceneReplay" aria-label="Replay animation">
+          <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9 9 9 0 00-6.4 2.7L3 8"/><path d="M3 3v5h5"/></svg> Replay
+        </button>
+        <div class="scene-cap" id="sceneCap">A full 30-agent sweep is expensive. We start with a cheap pilot.</div>
+      </div>
+      <svg id="lawviz" viewBox="0 0 800 470" role="img"
+           aria-label="Effective team size versus nominal team size for Qwen2.5-7B on GSM-Hard. Self-correction and noise placebo rise sublinearly to about six effective agents at N=30; debate saturates below two. All fall far below the independent-voter (Condorcet) ideal. A 5-agent pilot fit extrapolates to N=30."></svg>
     </div>
 
     <div class="strip">
@@ -356,5 +437,266 @@
   </div>
 </footer>
 
+<script>
+(function(){
+  "use strict";
+  var SVGNS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("lawviz");
+  var cap = document.getElementById("sceneCap");
+  var replayBtn = document.getElementById("sceneReplay");
+  var stepEls = Array.prototype.slice.call(document.querySelectorAll(".scene-step"));
+  if(!svg) return;
+
+  // ---- geometry --------------------------------------------------
+  var x0=60, x1=668, yt=50, yb=418;
+  var xMin=1, xMax=32, yMin=0, yMax=31;
+  function sx(N){ return x0 + (N-xMin)/(xMax-xMin)*(x1-x0); }
+  function sy(v){ return yb - (v-yMin)/(yMax-yMin)*(yb-yt); }
+
+  // ---- data (fitted params + observed N_eff, from the paper) -----
+  var COND = {
+    "self-corr": { c:0.3352, beta:0.2524, color:"#2ca02c", marker:"square",
+      label:"Self-correction",
+      obs:[1.571,1.997,2.629,3.107,3.672,4.452,5.011,6.103], anno:"30 → 6.1" },
+    "noise":     { c:0.3325, beta:0.2718, color:"#1f77b4", marker:"diamond",
+      label:"Noise placebo",
+      obs:[1.572,1.994,2.714,3.240,3.816,4.578,5.175,6.442] },
+    "debate":    { c:0.5735, beta:0.0136, color:"#d62728", marker:"circle",
+      label:"Debate (peers)",
+      obs:[1.297,1.382,1.523,1.579,1.665,1.860,1.803,1.793], anno:"30 → 1.8" }
+  };
+  var ORDER = ["self-corr","noise","debate"];
+  var NPTS = [2,3,5,7,10,15,20,30];
+  function neff(N,c,b){ return N/(1 + c*(N-1)*Math.pow(N,-b)); }
+
+  function el(tag, attrs){
+    var e = document.createElementNS(SVGNS, tag);
+    for(var k in attrs){
+      if(k==="text"){ e.textContent = attrs[k]; }
+      else { e.setAttribute(k, attrs[k]); }
+    }
+    return e;
+  }
+  function add(parent, tag, attrs){ var e=el(tag,attrs); parent.appendChild(e); return e; }
+  function curveD(c,b,n0,n1){
+    var d="", STEPS=64, i, N, v;
+    for(i=0;i<=STEPS;i++){
+      N = n0 + (n1-n0)*i/STEPS;
+      v = neff(N,c,b);
+      d += (i?"L":"M") + sx(N).toFixed(1) + " " + sy(v).toFixed(1) + " ";
+    }
+    return d;
+  }
+  function marker(cx, cy, type, color, cls){
+    var e;
+    if(type==="circle"){
+      e = el("circle",{cx:cx,cy:cy,r:5.2,fill:color,stroke:"#fff","stroke-width":1.4});
+    } else if(type==="square"){
+      e = el("rect",{x:cx-4.7,y:cy-4.7,width:9.4,height:9.4,fill:color,stroke:"#fff","stroke-width":1.4});
+    } else { // diamond
+      e = el("rect",{x:cx-4.4,y:cy-4.4,width:8.8,height:8.8,fill:color,stroke:"#fff","stroke-width":1.4});
+      cls = (cls ? cls+" " : "") + "dia";
+      e.style.transform = "rotate(45deg)";
+    }
+    if(cls) e.setAttribute("class", cls);
+    return e;
+  }
+
+  // ---- build the static chart, return animatable refs ------------
+  function build(){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    var refs = { curvesP:[], curvesE:[], mkP:[], mkE:[], annos:[] };
+
+    // pink "departure" region (below the diagonal), hidden
+    refs.region = add(svg,"polygon",{ class:"fade",
+      points: sx(1)+","+sy(1)+" "+sx(30)+","+sy(30)+" "+sx(30)+","+sy(0)+" "+sx(1)+","+sy(0),
+      fill:"#d62728","fill-opacity":0.06 });
+
+    // grid
+    var gx=[5,10,15,20,25,30], gy=[5,10,15,20,25,30], i;
+    for(i=0;i<gx.length;i++) add(svg,"line",{x1:sx(gx[i]),y1:yt,x2:sx(gx[i]),y2:yb,stroke:"#eceef5","stroke-width":1});
+    for(i=0;i<gy.length;i++) add(svg,"line",{x1:x0,y1:sy(gy[i]),x2:x1,y2:sy(gy[i]),stroke:"#eceef5","stroke-width":1});
+
+    // pilot band (N<=5), hidden
+    refs.band = add(svg,"rect",{ class:"fade", x:sx(1), y:yt, width:sx(5)-sx(1), height:yb-yt,
+      fill:"#eef0fe", stroke:"#dcdcfb", "stroke-width":1 });
+    refs.bandLbl = add(svg,"text",{ class:"fade", x:(sx(1)+sx(5))/2, y:sy(21),
+      "text-anchor":"middle", "font-size":11, "font-weight":700, fill:"#4f46e5" });
+    refs.bandLbl.textContent = "pilot · N ≤ 5";
+
+    // axes spines
+    add(svg,"line",{x1:x0,y1:yt,x2:x0,y2:yb,stroke:"#b9bed0","stroke-width":1.2});
+    add(svg,"line",{x1:x0,y1:yb,x2:x1,y2:yb,stroke:"#b9bed0","stroke-width":1.2});
+    // ticks + labels
+    for(i=0;i<gx.length;i++){
+      add(svg,"line",{x1:sx(gx[i]),y1:yb,x2:sx(gx[i]),y2:yb+5,stroke:"#b9bed0","stroke-width":1.2});
+      add(svg,"text",{x:sx(gx[i]),y:yb+19,"text-anchor":"middle","font-size":11,fill:"#646b85",text:gx[i]});
+    }
+    var yl=[0,5,10,15,20,25,30];
+    for(i=0;i<yl.length;i++){
+      add(svg,"line",{x1:x0-5,y1:sy(yl[i]),x2:x0,y2:sy(yl[i]),stroke:"#b9bed0","stroke-width":1.2});
+      add(svg,"text",{x:x0-9,y:sy(yl[i])+4,"text-anchor":"end","font-size":11,fill:"#646b85",text:yl[i]});
+    }
+    // axis titles + chart title
+    add(svg,"text",{x:(x0+x1)/2,y:yb+39,"text-anchor":"middle","font-size":12.5,fill:"#2a2e45",text:"Nominal team size  N"});
+    var yax = add(svg,"text",{x:16,y:(yt+yb)/2,"text-anchor":"middle","font-size":12.5,fill:"#2a2e45",text:"Effective team size  Nₑᶠᶠ"});
+    yax.setAttribute("transform","rotate(-90 16 "+((yt+yb)/2)+")");
+    add(svg,"text",{x:(x0+x1)/2,y:30,"text-anchor":"middle","font-size":13.5,"font-weight":700,fill:"#0f1222",
+      text:"Effective team size saturates  ·  Qwen2.5-7B × GSM-Hard"});
+
+    // diagonal (Condorcet ideal), hidden, drawn
+    refs.diag = add(svg,"path",{ class:"draw", d:"M"+sx(1)+" "+sy(1)+" L"+sx(30)+" "+sy(30),
+      fill:"none", stroke:"#8a90a6", "stroke-width":1.6, "stroke-dasharray":"7 5" });
+    refs.diagLbl = add(svg,"text",{ class:"fade", x:sx(25.5), y:46, "text-anchor":"end",
+      "font-size":10.5, "font-style":"italic", fill:"#6a7088" });
+    refs.diagLbl.appendChild(el("tspan",{x:sx(25.5),text:"independent-voter ideal"}));
+    refs.diagLbl.appendChild(el("tspan",{x:sx(25.5),dy:13,text:"(Condorcet)"}));
+
+    // departure label, hidden
+    refs.departLbl = add(svg,"text",{ class:"fade", x:sx(15.5), y:sy(9.4),
+      "text-anchor":"middle", "font-size":11, "font-style":"italic", fill:"#a02424",
+      "paint-order":"stroke", stroke:"#fff", "stroke-width":3 });
+    refs.departLbl.appendChild(el("tspan",{x:sx(15.5),text:"departure from"}));
+    refs.departLbl.appendChild(el("tspan",{x:sx(15.5),dy:13,text:"independent-voter ideal"}));
+
+    // curves (split at N=5) + markers + annotations, per condition
+    ORDER.forEach(function(key){
+      var c = COND[key];
+      var p1 = add(svg,"path",{ class:"draw", d:curveD(c.c,c.beta,1,5),
+        fill:"none", stroke:c.color, "stroke-width":2 });
+      var p2 = add(svg,"path",{ class:"draw", d:curveD(c.c,c.beta,5,30),
+        fill:"none", stroke:c.color, "stroke-width":2 });
+      refs.curvesP.push(p1); refs.curvesE.push(p2);
+    });
+    // markers on top of curves
+    ORDER.forEach(function(key){
+      var c = COND[key];
+      NPTS.forEach(function(N, idx){
+        var cx=sx(N), cy=sy(c.obs[idx]);
+        var m = marker(cx, cy, c.marker, c.color, "mk");
+        // initial scaled-down transform
+        m.style.transform = (c.marker==="diamond" ? "rotate(45deg) scale(.3)" : "scale(.3)");
+        svg.appendChild(m);
+        if(N<=5) refs.mkP.push(m); else refs.mkE.push(m);
+      });
+      // right-edge annotation -> final marker
+      if(c.anno){
+        var cx=sx(30), cy=sy(c.obs[7]);
+        var ax=x1+8, ay=(key==="debate")?sy(3.0):sy(9.4);
+        var conn = add(svg,"line",{ class:"fade", x1:ax-2,y1:ay,x2:cx+5,y2:cy,
+          stroke:c.color, "stroke-width":1, "stroke-opacity":0.55 });
+        var t = add(svg,"text",{ class:"fade", x:ax, y:ay, "font-size":11.5,
+          "font-weight":700, fill:c.color });
+        t.appendChild(el("tspan",{x:ax,text:c.label.split(" ")[0].toLowerCase()+":"}));
+        t.appendChild(el("tspan",{x:ax,dy:14,text:c.anno}));
+        refs.annos.push(conn); refs.annos.push(t);
+      }
+    });
+
+    // legend (top-left, always visible)
+    var lx=x0+14, ly=yt+16, rh=19;
+    ORDER.forEach(function(key, i){
+      var c=COND[key], y=ly+i*rh;
+      svg.appendChild(marker(lx+5, y, c.marker, c.color));
+      add(svg,"text",{x:lx+18,y:y+4,"font-size":11,fill:"#2a2e45",text:c.label});
+    });
+
+    return refs;
+  }
+
+  // ---- animation orchestration -----------------------------------
+  var timers=[], refs=null;
+  function clearTimers(){ timers.forEach(clearTimeout); timers=[]; }
+  function at(ms, fn){ timers.push(setTimeout(fn, ms)); }
+  function showFade(e){ if(e) e.classList.add("show"); }
+  function drawPath(e){
+    if(!e) return;
+    var len = e.getTotalLength();
+    e.style.strokeDasharray = e.getAttribute("stroke-dasharray") ? null : len;
+    e.style.strokeDashoffset = len;
+    e.getBoundingClientRect(); // reflow
+    e.style.strokeDashoffset = 0;
+  }
+  function showMarker(m){
+    if(!m) return;
+    m.classList.add("show");
+    m.style.transform = (m.style.transform.indexOf("rotate")>=0) ? "rotate(45deg) scale(1)" : "scale(1)";
+  }
+  function setSteps(n){ stepEls.forEach(function(s){ s.classList.toggle("on", +s.dataset.step <= n); }); }
+  function setCap(html){ cap.innerHTML = html; }
+
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function finalState(){
+    showFade(refs.region); showFade(refs.band); showFade(refs.bandLbl);
+    showFade(refs.diagLbl); showFade(refs.departLbl);
+    refs.diag.style.strokeDashoffset = 0;
+    refs.curvesP.concat(refs.curvesE).forEach(function(p){ p.style.strokeDashoffset = 0; });
+    refs.mkP.concat(refs.mkE).forEach(showMarker);
+    refs.annos.forEach(showFade);
+    setSteps(3);
+  }
+
+  function run(){
+    clearTimers();
+    refs = build();
+
+    if(reduce){
+      finalState();
+      setCap("Self-correction saturates near <b>6 of 30</b> effective agents; debate collapses below <b>2</b>.");
+      return;
+    }
+
+    setSteps(1);
+    setCap("A full 30-agent sweep is expensive. We start with a cheap pilot.");
+
+    at(250, function(){ drawPath(refs.diag); showFade(refs.diagLbl); });
+    at(650, function(){ showFade(refs.region); });
+    at(900, function(){ showFade(refs.band); showFade(refs.bandLbl); });
+    at(1150, function(){
+      setCap("Run the experiment only up to <b>5 agents</b> — measure effective team size.");
+      refs.mkP.forEach(function(m,i){ at(i*110, function(){ showMarker(m); }); });
+    });
+
+    at(2350, function(){
+      setSteps(2);
+      setCap("Fit the law <b>Nₑᶠᶠ = N / (1 + c(N−1)N⁻ᵝ)</b> — just two parameters.");
+      refs.curvesP.forEach(drawPath);
+    });
+
+    at(3550, function(){
+      setSteps(3);
+      setCap("Extrapolate the fit out to <b>N = 30</b> — no large run required.");
+      refs.curvesE.forEach(drawPath);
+    });
+
+    at(4650, function(){
+      setCap("Held-out runs at <b>N = 7…30</b> land right on the predicted curves.");
+      refs.mkE.forEach(function(m,i){ at(i*100, function(){ showMarker(m); }); });
+    });
+
+    at(5750, function(){
+      refs.annos.forEach(showFade);
+      showFade(refs.departLbl);
+      setCap("Self-correction saturates near <b>6 of 30</b> effective agents; debate collapses below <b>2</b>.");
+    });
+  }
+
+  if(replayBtn) replayBtn.addEventListener("click", run);
+
+  // start when scrolled into view (once)
+  if("IntersectionObserver" in window){
+    var started=false;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting && !started){ started=true; run(); io.disconnect(); }
+      });
+    }, { threshold: 0.35 });
+    io.observe(svg);
+  } else {
+    run();
+  }
+})();
+</script>
 </body>
 </html>
