@@ -8,12 +8,14 @@ The site presents peer-reviewed research on the Ringelmann effect in multi-agent
 
 - [The Ringelmann Effect in Multi-Agent LLM Systems: A Scaling Law for Effective Team Size](https://arxiv.org/abs/2606.02646): A two-parameter scaling law that classifies any agent configuration into hard-ceiling, sublinear, or linear regimes, validated across 38 model × task × condition cells. (arXiv:2606.02646)
 - [The Cost of Consensus: Isolated Self-Correction Prevails Over Unguided Homogeneous Multi-Agent Debate](https://dl.acm.org/doi/10.1145/3786335.3813137): A controlled study of N=10 homogeneous debate teams across three open-weight models on GSM-Hard and MMLU-Hard, decomposing debate failure into three mechanistic pathways. CAIS '26 Industry Spotlight.
+- [eCAL: The Energy Cost of AI Lifecycle](https://doi.org/10.1109/JSAC.2025.3642835): The first metric to measure the full energy of an AI system — data collection, preprocessing, training, evaluation, and inference — end to end in Joules per bit. The measurement backbone for ILLUME's Energy–Utility frontier. IEEE JSAC 2026, SensorLab, Jožef Stefan Institute. (doi:10.1109/JSAC.2025.3642835)
 
 ## Key findings
 
 - Sycophantic conformity: agents adopt the majority answer up to 85.5% of the time.
 - Contextual fragility: correct reasoning is destabilized at rates up to 70%.
 - Debate costs 2.1–3.4× more tokens for equal or lower accuracy.
+- Energy scales O(N) while accuracy stays sublinear — a Ringelmann Energy Ratio of ~0.06 at N=10 (≈23× the compute for marginal returns).
 
 ## Contact
 
