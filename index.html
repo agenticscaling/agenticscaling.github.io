@@ -215,6 +215,10 @@
   .paper li::before{content:"";position:absolute;left:0;top:7px;width:14px;height:14px;border-radius:50%;background:var(--brand-soft);
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 6L9 17l-5-5' fill='none' stroke='%2326619C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-size:11px;background-repeat:no-repeat;background-position:center}
   .paper .by{margin-top:auto;padding-top:20px;font-size:13px;color:var(--muted)}
+  .paper.linked{position:relative}
+  .paper .stretch{color:inherit;text-decoration:none}
+  .paper .stretch::after{content:"";position:absolute;inset:0;border-radius:16px}
+  .paper .evid{position:relative;z-index:1;color:var(--brand);font-weight:600}
   .paper .venuerow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   .paper .spot{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand-2));padding:5px 11px;border-radius:7px}
   .paper .spotlight{margin-top:18px;padding:14px 16px;border-radius:12px;font-size:14px;line-height:1.5;color:var(--ink-2);background:var(--brand-soft);border:1px solid #cddcf1}
@@ -401,9 +405,9 @@
         </ul>
         <div class="spotlight">Selected as an <strong>Industry Spotlight</strong> paper — invited to present at the <strong>AI Engineer World's Fair</strong> (San Francisco, June 2026), in front of <strong>6,000+ practicing engineers</strong>.</div>
       </a>
-      <a class="paper" href="https://arxiv.org/abs/2606.02646" target="_blank" rel="noopener">
-        <span class="venue" style="text-transform:none">arXiv:2606.02646</span>
-        <h3>The Ringelmann Effect in Multi-Agent LLM Systems: A Scaling Law for Effective Team Size</h3>
+      <div class="paper linked">
+        <div class="venuerow"><span class="venue">NeurIPS '26</span><span class="venue" style="text-transform:none">arXiv:2606.02646</span></div>
+        <h3><a class="stretch" href="https://arxiv.org/abs/2606.02646" target="_blank" rel="noopener">The Ringelmann Effect in Multi-Agent LLM Systems: A Scaling Law for Effective Team Size</a></h3>
         <p>A two-parameter scaling law that classifies any agent configuration into hard-ceiling, sublinear, or linear regimes — validated across 38 model × task × condition cells.</p>
         <ul>
           <li>A single functional form fits every condition at R² &gt; 0.99</li>
@@ -411,8 +415,8 @@
           <li>Only architectural diversity escapes the ceiling — more talk does not</li>
           <li>Energy scales O(N) while accuracy stays sublinear — a Ringelmann Energy Ratio of ~0.06 at N = 10 (≈23× the compute for marginal returns)</li>
         </ul>
-        <div class="by">From the ILLUME research programme</div>
-      </a>
+        <div class="by">Main Research Track · <a class="evid" href="evidence.html">See it hold on 14 models →</a></div>
+      </div>
 
       <div class="paper energy">
         <div class="energy-l">
@@ -422,8 +426,7 @@
           first metric to add up the full energy of an AI system — data collection, preprocessing,
           training, evaluation and inference — end to end, in Joules per bit. It is the measurement
           backbone beneath ILLUME's Energy–Utility frontier.</p>
-          <div class="by">Chou, Hribar, Hanžel, Mohorčič, Fortuna · SensorLab, Jožef Stefan Institute
-            · <a href="https://doi.org/10.1109/JSAC.2025.3642835" target="_blank" rel="noopener">DOI</a>
+          <div class="by"><a href="https://doi.org/10.1109/JSAC.2025.3642835" target="_blank" rel="noopener">DOI</a>
             · <a href="https://sensorlab.github.io/eCAL/" target="_blank" rel="noopener">Project</a>
             · <a href="https://github.com/sensorlab/eCAL" target="_blank" rel="noopener">Code</a></div>
         </div>

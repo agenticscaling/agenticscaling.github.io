@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evidence — the effective-team-size ceiling | ILLUME</title>
+<meta name="description" content="Interactive evidence behind the Ringelmann scaling law: effective team size and fitted regime across 14 open models and 5 reasoning benchmarks.">
+<style>
+  :root{
+    --bg:#ffffff; --bg-soft:#f7f8fb; --ink:#0f1222; --ink-2:#2a2e45; --muted:#646b85;
+    --line:#e8eaf1; --line-2:#dfe2ec; --brand:#26619C; --brand-2:#4d8fd6;
+    --brand-soft:#e8f0fa; --accent:#0ea5a4;
+    --shadow:0 1px 2px rgba(16,18,34,.04),0 8px 30px rgba(16,18,34,.06);
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  header{border-bottom:1px solid var(--line);background:rgba(255,255,255,.9);
+    position:sticky;top:0;backdrop-filter:blur(8px);z-index:10}
+  header .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{font-weight:700;letter-spacing:-.01em;text-decoration:none;color:var(--ink)}
+  .back{font-size:14px;color:var(--brand);text-decoration:none}
+  .back:hover{text-decoration:underline}
+  h1{font-size:clamp(26px,4vw,40px);line-height:1.15;letter-spacing:-.02em;margin:36px 0 10px}
+  .lede{font-size:17px;color:var(--ink-2);max-width:70ch;margin:0 0 8px}
+  .stat{display:flex;flex-wrap:wrap;gap:22px;margin:22px 0 6px;padding:16px 18px;
+    background:var(--brand-soft);border:1px solid var(--line-2);border-radius:12px}
+  .stat div{min-width:150px}
+  .stat b{display:block;font-size:24px;letter-spacing:-.02em;color:var(--brand)}
+  .stat span{font-size:13px;color:var(--muted)}
+  h2{font-size:22px;letter-spacing:-.01em;margin:46px 0 6px}
+  .sub{color:var(--muted);font-size:14.5px;margin:0 0 16px;max-width:75ch}
+  .panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .card{border:1px solid var(--line);border-radius:12px;padding:10px 8px 4px;background:var(--bg)}
+  .card h3{margin:0 0 2px;font-size:13px;font-weight:600;text-align:center;color:var(--ink-2)}
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .axis{stroke:var(--line-2);stroke-width:1}
+  .tick{fill:var(--muted);font-size:9px}
+  .alab{fill:var(--muted);font-size:10px}
+  .ideal{stroke:#9aa1b5;stroke-width:1.2;stroke-dasharray:4 3}
+  .gap{fill:#d62728;opacity:.05}
+  .ln{fill:none;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;
+    transition:opacity .12s,stroke-width .12s}
+  .dimmed{opacity:.13}
+  .hi{stroke-width:3.2}
+  .legend{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0;align-items:center}
+  .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-2);
+    border-radius:999px;padding:3px 10px 3px 7px;font-size:12px;cursor:pointer;
+    background:var(--bg);color:var(--ink-2);transition:background .12s}
+  .chip:hover,.chip.on{background:var(--brand-soft);border-color:var(--brand-2)}
+  .dot{width:10px;height:10px;border-radius:50%;flex:none}
+  .ramp{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin:14px 0 0}
+  .rampbar{width:130px;height:9px;border-radius:5px;
+    background:linear-gradient(90deg,#86b6ef,#3987e5,#256abf,#0d366b)}
+  #tip{position:fixed;pointer-events:none;opacity:0;transition:opacity .1s;
+    background:var(--ink);color:#fff;font-size:12px;padding:6px 9px;border-radius:7px;
+    box-shadow:var(--shadow);z-index:50;white-space:nowrap}
+  .band-lin{fill:#ccddc8;opacity:.45}
+  .band-sub{fill:#fff0cc;opacity:.5}
+  .band-sat{fill:#ffcccc;opacity:.5}
+  .bandlab{font-size:11px;font-style:italic}
+  details{margin:26px 0 0;border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+  summary{cursor:pointer;font-weight:600;font-size:14px}
+  table{border-collapse:collapse;width:100%;margin-top:12px;font-size:12.5px}
+  th,td{border-bottom:1px solid var(--line);padding:5px 8px;text-align:right}
+  th:first-child,td:first-child{text-align:left}
+  th{color:var(--muted);font-weight:600}
+  .tablewrap{overflow-x:auto}
+  footer{margin:54px 0 40px;padding-top:18px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:13px}
+  code{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="brand" href="./">ILLUME</a>
+  <a class="back" href="./#research">&larr; Back to research</a>
+</div></header>
+
+<main class="wrap">
+  <h1>Thirty agents, at most four opinions</h1>
+  <p class="lede">Adding agents to a team stops adding independent judgement long before
+  it stops adding cost. These are the measurements behind that claim: every open model we
+  tested, on every reasoning benchmark, under debate.</p>
+
+  <div class="stat">
+    <div><b id="s-models">–</b><span>open models, 3B&ndash;27B</span></div>
+    <div><b id="s-cells">–</b><span>model &times; benchmark cells</span></div>
+    <div><b id="s-span">–</b><span>effective team size at N=30</span></div>
+    <div><b id="s-sat">–</b><span>cells in near-saturation</span></div>
+  </div>
+
+  <h2>Effective team size vs nominal team size</h2>
+  <p class="sub">Each line is one model. The dashed diagonal is the independent-voter ideal
+  &mdash; where <em>N</em> agents would contribute <em>N</em> independent opinions. The shaded
+  gap is what never materialises. Hover a line, or a model chip, to isolate it.</p>
+  <div class="panels" id="neff"></div>
+  <div class="ramp"><span>3B</span><span class="rampbar"></span><span>27B</span>
+    <span style="margin-left:6px">model size &mdash; colour</span></div>
+  <div class="legend" id="chips"></div>
+
+  <h2>Where each model &times; benchmark lands</h2>
+  <p class="sub">The fitted regime law <code>R(N) = 1 / (1 + c(N&minus;1)N<sup>&minus;&beta;</sup>)</code>.
+  &beta; near 0 means a hard ceiling: effective size stops growing regardless of how many
+  agents you add. Colour is the benchmark; hover for the model.</p>
+  <div class="card" style="padding:14px"><div id="cb"></div></div>
+  <div class="legend" id="tchips"></div>
+
+  <details>
+    <summary>Table view &mdash; all fitted values</summary>
+    <div class="tablewrap"><table id="tbl"></table></div>
+  </details>
+
+  <footer>
+    <p><strong>Method.</strong> Debate condition (every agent sees all peers), final
+    communication round, effective team size from the entropy of the team's answer
+    distribution. Bars are means over 3 independent runs per cell.</p>
+    <p><strong>Excluded.</strong> <span id="excl"></span> &mdash; these have so far run only
+    one of the five benchmarks, too few to place beside models measured on all five.</p>
+    <p>Generated from the ILLUME Ringelmann sweep. Figures and source data are in the
+    project repository.</p>
+  </footer>
+</main>
+<div id="tip"></div>
+
+<script>
+const DATA = {"tasks":[{"key":"mmlu_hard","label":"MMLU-Hard"},{"key":"arc","label":"ARC-Challenge"},{"key":"gsm8k","label":"GSM8K"},{"key":"gsmhard","label":"GSM-Hard"},{"key":"math500","label":"MATH-500"}],"models":[{"key":"qwen2.5-3b","label":"Qwen2.5-3B","params":3.1,"reasoning":false},{"key":"smollm3-3b","label":"SmolLM3-3B","params":3.1,"reasoning":false},{"key":"qwen3-4b","label":"Qwen3-4B","params":4.0,"reasoning":false},{"key":"mistral-7b","label":"Mistral-7B","params":7.2,"reasoning":false},{"key":"olmo2-7b","label":"OLMo-2-7B","params":7.3,"reasoning":false},{"key":"qwen2.5-7b","label":"Qwen2.5-7B","params":7.6,"reasoning":false},{"key":"llama3.1-8b","label":"Llama-3.1-8B","params":8.0,"reasoning":false},{"key":"marin-8b","label":"Marin-8B","params":8.0,"reasoning":false},{"key":"qwen3-8b","label":"Qwen3-8B","params":8.2,"reasoning":false},{"key":"phi4-14b","label":"Phi-4-14B","params":14.7,"reasoning":false},{"key":"qwen3-14b","label":"Qwen3-14B","params":14.8,"reasoning":false},{"key":"r1-distill-qwen-14b","label":"R1-Distill-14B","params":14.8,"reasoning":true},{"key":"gpt-oss-20b","label":"gpt-oss-20B","params":21.0,"reasoning":true},{"key":"qwen3.6-27b","label":"Qwen3.6-27B","params":27.0,"reasoning":false}],"neff":{"gpt-oss-20b":{"arc":[[2,1.0189],[3,1.0256],[5,1.0256],[7,1.0325],[10,1.0373],[15,1.0329],[20,1.0325],[25,1.0378],[30,1.0449]],"gsm8k":[[2,1.0212],[3,1.0248],[5,1.0493],[7,1.0507],[10,1.0709],[15,1.063],[20,1.0646],[25,1.0736],[30,1.0733]],"gsmhard":[[2,1.0993],[3,1.1251],[5,1.1737],[7,1.2106],[10,1.262],[15,1.287],[20,1.3863],[25,1.3486],[30,1.3933]],"math500":[[2,1.042],[3,1.0894],[5,1.1067],[7,1.1437],[10,1.152],[15,1.205],[20,1.1831],[25,1.2374],[30,1.2062]],"mmlu_hard":[[2,1.076],[3,1.1072],[5,1.106],[7,1.1237],[10,1.1356],[15,1.151],[20,1.1669],[25,1.1535],[30,1.1772]]},"llama3.1-8b":{"arc":[[2,1.0721],[3,1.0945],[5,1.1027],[7,1.0973],[10,1.1014],[15,1.101],[20,1.0869],[25,1.0789],[30,1.0807]],"gsm8k":[[2,1.3632],[3,1.592],[5,1.8419],[7,2.0041],[10,2.2162],[15,2.4804],[20,2.5238],[25,2.6022],[30,2.7677]],"gsmhard":[[2,1.4936],[3,1.8278],[5,2.3552],[7,2.6942],[10,3.3122],[15,3.7658],[20,4.3837],[25,4.9344],[30,5.3744]],"math500":[[2,1.374],[3,1.5773],[5,1.8747],[7,1.9885],[10,2.0722],[15,2.3359],[20,2.2125],[25,2.3206],[30,2.5879]],"mmlu_hard":[[2,1.2569],[3,1.3422],[5,1.3577],[7,1.3938],[10,1.3859],[15,1.354],[20,1.355],[25,1.3393],[30,1.3232]]},"marin-8b":{"arc":[[2,1.1562],[3,1.2051],[5,1.2303],[7,1.2627],[10,1.2702],[15,1.2697],[20,1.2892],[25,1.2864],[30,1.2995]],"gsm8k":[[2,1.4276],[3,1.6112],[5,1.9477],[7,2.1005],[10,2.2959],[15,2.5881],[20,2.8014],[25,3.0092],[30,3.0476]],"gsmhard":[[2,1.4818],[3,1.8608],[5,2.3308],[7,2.7955],[10,3.2438],[15,3.914],[20,4.4764],[25,5.0955],[30,5.3074]],"math500":[[2,1.456],[3,1.7888],[5,2.166],[7,2.4575],[10,2.7416],[15,3.0297],[20,3.3793],[25,3.5498],[30,3.4858]],"mmlu_hard":[[2,1.366],[3,1.4792],[5,1.6749],[7,1.7561],[10,1.7657],[15,1.7782],[20,1.8197],[25,1.8303],[30,1.8436]]},"mistral-7b":{"arc":[[2,1.0206],[3,1.0252],[5,1.0273],[7,1.0226],[10,1.0251],[15,1.0194],[20,1.0184],[25,1.0215],[30,1.0225]],"gsm8k":[[2,1.423],[3,1.615],[5,1.8199],[7,1.9347],[10,2.1014],[15,2.2396],[20,2.3086],[25,2.3858],[30,2.4834]],"gsmhard":[[2,1.588],[3,1.9299],[5,2.4406],[7,2.8372],[10,3.3252],[15,4.0243],[20,4.8325],[25,5.2083],[30,5.7818]],"math500":[[2,1.426],[3,1.6057],[5,1.8919],[7,2.0177],[10,2.222],[15,2.3842],[20,2.6511],[25,2.7399],[30,2.8972]],"mmlu_hard":[[2,1.0939],[3,1.1042],[5,1.0993],[7,1.0671],[10,1.0894],[15,1.0869],[20,1.0762],[25,1.0818],[30,1.0715]]},"olmo2-7b":{"arc":[[2,1.0807],[3,1.0894],[5,1.1102],[7,1.1199],[10,1.1195],[15,1.1375],[20,1.141],[25,1.1617],[30,1.1654]],"gsm8k":[[2,1.3222],[3,1.474],[5,1.6698],[7,1.7343],[10,1.9332],[15,2.0073],[20,2.0074],[25,2.1098],[30,2.0922]],"gsmhard":[[2,1.4946],[3,1.7424],[5,2.24],[7,2.5888],[10,3.2578],[15,3.7745],[20,4.6998],[25,5.0556],[30,5.2915]],"math500":[[2,1.48],[3,1.6017],[5,1.7963],[7,1.9537],[10,1.9666],[15,2.0533],[20,2.236],[25,2.1551],[30,2.124]],"mmlu_hard":[[2,1.1727],[3,1.2175],[5,1.2382],[7,1.2278],[10,1.2355],[15,1.2305],[20,1.2728],[25,1.2814],[30,1.2569]]},"phi4-14b":{"arc":[[2,1.0052],[3,1.0053],[5,1.0064],[7,1.0065],[10,1.0091],[15,1.0077],[20,1.0084],[25,1.0066],[30,1.0122]],"gsm8k":[[2,1.1865],[3,1.2584],[5,1.3547],[7,1.4872],[10,1.5289],[15,1.6583],[20,1.69],[25,1.6827],[30,1.7582]],"gsmhard":[[2,1.3559],[3,1.5852],[5,1.8873],[7,2.1679],[10,2.5741],[15,3.0488],[20,3.4402],[25,3.5685],[30,4.0238]],"math500":[[2,1.246],[3,1.3142],[5,1.4821],[7,1.5098],[10,1.5693],[15,1.633],[20,1.8356],[25,1.8197],[30,1.8682]],"mmlu_hard":[[2,1.0691],[3,1.0664],[5,1.0764],[7,1.0991],[10,1.0999],[15,1.1153],[20,1.103],[25,1.0966],[30,1.1122]]},"qwen2.5-3b":{"arc":[[2,1.0824],[3,1.0924],[5,1.1013],[7,1.1088],[10,1.1066],[15,1.1113],[20,1.1227],[25,1.1276],[30,1.1363]],"gsm8k":[[2,1.3442],[3,1.3543],[5,1.4984],[7,1.5899],[10,1.6645],[15,1.7682],[20,1.829],[25,1.756],[30,1.7949]],"gsmhard":[[2,1.4779],[3,1.5997],[5,2.0448],[7,2.4351],[10,2.9188],[15,3.2615],[20,3.7613],[25,3.8982],[30,4.1101]],"math500":[[2,1.314],[3,1.4072],[5,1.6062],[7,1.7382],[10,1.8634],[15,1.883],[20,1.9992],[25,2.121],[30,2.1545]],"mmlu_hard":[[2,1.1133],[3,1.137],[5,1.149],[7,1.1335],[10,1.1488],[15,1.1684],[20,1.1624],[25,1.181],[30,1.1761]]},"qwen2.5-7b":{"arc":[[2,1.0137],[3,1.0155],[5,1.0226],[7,1.0247],[10,1.0262],[15,1.0247],[20,1.0294],[25,1.0306],[30,1.0325]],"gsm8k":[[2,1.2388],[3,1.347],[5,1.4353],[7,1.5057],[10,1.5421],[15,1.5853],[20,1.6084],[25,1.6164],[30,1.6178]],"gsmhard":[[2,1.3776],[3,1.5573],[5,1.9046],[7,2.0646],[10,2.3745],[15,2.7191],[20,2.8585],[25,2.8947],[30,3.1403]],"math500":[[2,1.23],[3,1.2753],[5,1.4166],[7,1.4557],[10,1.5202],[15,1.5184],[20,1.5793],[25,1.6025],[30,1.6626]],"mmlu_hard":[[2,1.0773],[3,1.0919],[5,1.0972],[7,1.1104],[10,1.1196],[15,1.1143],[20,1.101],[25,1.1033],[30,1.105]]},"qwen3-14b":{"arc":[[2,1.0043],[3,1.0015],[5,1.0041],[7,1.0024],[10,1.0039],[15,1.0048],[20,1.0039],[25,1.0043],[30,1.0032]],"gsm8k":[[2,1.1266],[3,1.19],[5,1.2459],[7,1.2622],[10,1.337],[15,1.3196],[20,1.3539],[25,1.3726],[30,1.3911]],"gsmhard":[[2,1.1937],[3,1.2807],[5,1.4164],[7,1.5249],[10,1.6899],[15,1.7946],[20,1.9082],[25,2.0062],[30,2.0939]],"math500":[[2,1.142],[3,1.1508],[5,1.2175],[7,1.2655],[10,1.2752],[15,1.2854],[20,1.334],[25,1.3388],[30,1.3958]],"mmlu_hard":[[2,1.018],[3,1.0261],[5,1.028],[7,1.0299],[10,1.0327],[15,1.0319],[20,1.0401],[25,1.0361],[30,1.0386]]},"qwen3-4b":{"arc":[[2,1.0077],[3,1.0092],[5,1.0083],[7,1.0119],[10,1.0099],[15,1.0068],[20,1.0116],[25,1.0098],[30,1.0131]],"gsm8k":[[2,1.1903],[3,1.2777],[5,1.3697],[7,1.4269],[10,1.4819],[15,1.4994],[20,1.4955],[25,1.5494],[30,1.5044]],"gsmhard":[[2,1.2419],[3,1.4363],[5,1.6918],[7,1.8969],[10,2.0551],[15,2.3384],[20,2.5398],[25,2.7041],[30,2.8531]],"math500":[[2,1.186],[3,1.2984],[5,1.3832],[7,1.4421],[10,1.5082],[15,1.5524],[20,1.5556],[25,1.5728],[30,1.6491]],"mmlu_hard":[[2,1.0276],[3,1.032],[5,1.0404],[7,1.048],[10,1.0391],[15,1.0434],[20,1.0497],[25,1.0354],[30,1.0382]]},"qwen3-8b":{"arc":[[2,1.0077],[3,1.0107],[5,1.0088],[7,1.0119],[10,1.0096],[15,1.0093],[20,1.01],[25,1.0106],[30,1.0117]],"gsm8k":[[2,1.2365],[3,1.3374],[5,1.4459],[7,1.5109],[10,1.5925],[15,1.5893],[20,1.6356],[25,1.6272],[30,1.6286]],"gsmhard":[[2,1.3176],[3,1.545],[5,1.7608],[7,1.9633],[10,2.1085],[15,2.3926],[20,2.5626],[25,2.7087],[30,2.811]],"math500":[[2,1.22],[3,1.2815],[5,1.4543],[7,1.5477],[10,1.5819],[15,1.5862],[20,1.6856],[25,1.779],[30,1.6956]],"mmlu_hard":[[2,1.0359],[3,1.0529],[5,1.0521],[7,1.0483],[10,1.0617],[15,1.0578],[20,1.0646],[25,1.0527],[30,1.0582]]},"r1-distill-qwen-14b":{"arc":[[2,1.0378],[3,1.0475],[5,1.0534],[7,1.0519],[10,1.0626],[15,1.0633],[20,1.0636],[25,1.0707],[30,1.0712]],"gsm8k":[[2,1.0462],[3,1.0629],[5,1.0834],[7,1.0923],[10,1.1255],[15,1.1249],[20,1.1288],[25,1.1582],[30,1.134]],"gsmhard":[[2,1.2979],[3,1.4859],[5,1.7356],[7,2.0277],[10,2.1626],[15,2.4838],[20,2.6525],[25,2.8877],[30,3.0179]],"math500":[[2,1.032],[3,1.0405],[5,1.0512],[7,1.0777],[10,1.0819],[15,1.115],[20,1.1827],[25,1.1495],[30,1.165]],"mmlu_hard":[[2,1.1865],[3,1.2568],[5,1.3061],[7,1.3626],[10,1.4141],[15,1.4205],[20,1.4334],[25,1.3923],[30,1.4224]]},"smollm3-3b":{"arc":[[2,1.0661],[3,1.0918],[5,1.0903],[7,1.085],[10,1.0979],[15,1.1155],[20,1.1124],[25,1.1115],[30,1.11]],"gsm8k":[[2,1.4139],[3,1.649],[5,1.9684],[7,2.2659],[10,2.4583],[15,2.8143],[20,3.1152],[25,3.2356],[30,3.5339]],"gsmhard":[[2,1.5408],[3,2.0172],[5,2.6197],[7,3.1913],[10,3.9794],[15,5.054],[20,6.4794],[25,7.5291],[30,8.204]],"math500":[[2,1.426],[3,1.6661],[5,1.9207],[7,2.1439],[10,2.4093],[15,2.6646],[20,2.8895],[25,2.9831],[30,3.2959]],"mmlu_hard":[[2,1.221],[3,1.3054],[5,1.3018],[7,1.3486],[10,1.348],[15,1.3842],[20,1.3909],[25,1.4171],[30,1.4126]]}},"fits":[{"model":"gpt-oss-20b","task":"gsm8k","c":0.9819,"beta":0.0021},{"model":"gpt-oss-20b","task":"gsmhard","c":0.9281,"beta":0.0152},{"model":"gpt-oss-20b","task":"mmlu_hard","c":0.9289,"beta":0.0},{"model":"gpt-oss-20b","task":"arc","c":0.9832,"beta":0.0},{"model":"gpt-oss-20b","task":"math500","c":0.9475,"beta":0.0188},{"model":"llama3.1-8b","task":"gsm8k","c":0.6166,"beta":0.0},{"model":"llama3.1-8b","task":"gsmhard","c":0.4778,"beta":0.0},{"model":"llama3.1-8b","task":"mmlu_hard","c":0.6218,"beta":0.0},{"model":"llama3.1-8b","task":"arc","c":0.837,"beta":0.0},{"model":"llama3.1-8b","task":"math500","c":0.511,"beta":0.0},{"model":"marin-8b","task":"gsm8k","c":0.6324,"beta":0.0028},{"model":"marin-8b","task":"gsmhard","c":0.5937,"beta":0.2817},{"model":"marin-8b","task":"mmlu_hard","c":0.526,"beta":0.0},{"model":"marin-8b","task":"arc","c":0.7875,"beta":0.0},{"model":"marin-8b","task":"math500","c":0.4969,"beta":0.1213},{"model":"mistral-7b","task":"gsm8k","c":0.4789,"beta":0.0},{"model":"mistral-7b","task":"gsmhard","c":0.3404,"beta":0.1058},{"model":"mistral-7b","task":"mmlu_hard","c":0.8512,"beta":0.0},{"model":"mistral-7b","task":"arc","c":0.9505,"beta":0.0},{"model":"mistral-7b","task":"math500","c":0.4737,"beta":0.0},{"model":"olmo2-7b","task":"gsm8k","c":0.6839,"beta":0.0},{"model":"olmo2-7b","task":"gsmhard","c":0.5643,"beta":0.0636},{"model":"olmo2-7b","task":"mmlu_hard","c":0.8051,"beta":0.0},{"model":"olmo2-7b","task":"arc","c":0.9305,"beta":0.0},{"model":"olmo2-7b","task":"math500","c":0.4605,"beta":0.0},{"model":"phi4-14b","task":"gsm8k","c":0.9047,"beta":0.0},{"model":"phi4-14b","task":"gsmhard","c":0.6902,"beta":0.0},{"model":"phi4-14b","task":"mmlu_hard","c":0.9245,"beta":0.0},{"model":"phi4-14b","task":"arc","c":0.9932,"beta":0.0},{"model":"phi4-14b","task":"math500","c":0.7427,"beta":0.0},{"model":"qwen2.5-3b","task":"gsm8k","c":0.6723,"beta":0.0},{"model":"qwen2.5-3b","task":"gsmhard","c":0.5765,"beta":0.0414},{"model":"qwen2.5-3b","task":"mmlu_hard","c":0.8649,"beta":0.0},{"model":"qwen2.5-3b","task":"arc","c":0.9164,"beta":0.0},{"model":"qwen2.5-3b","task":"math500","c":0.6851,"beta":0.0},{"model":"qwen2.5-7b","task":"gsm8k","c":0.728,"beta":0.0},{"model":"qwen2.5-7b","task":"gsmhard","c":0.5802,"beta":0.0084},{"model":"qwen2.5-7b","task":"mmlu_hard","c":0.8524,"beta":0.0},{"model":"qwen2.5-7b","task":"arc","c":0.9627,"beta":0.0},{"model":"qwen2.5-7b","task":"math500","c":0.7338,"beta":0.0},{"model":"qwen3-14b","task":"gsm8k","c":0.8699,"beta":0.0},{"model":"qwen3-14b","task":"gsmhard","c":0.7894,"beta":0.0},{"model":"qwen3-14b","task":"mmlu_hard","c":0.9775,"beta":0.0},{"model":"qwen3-14b","task":"arc","c":0.9973,"beta":0.0},{"model":"qwen3-14b","task":"math500","c":0.8806,"beta":0.0},{"model":"qwen3-4b","task":"gsm8k","c":0.775,"beta":0.0073},{"model":"qwen3-4b","task":"gsmhard","c":0.7262,"beta":0.1623},{"model":"qwen3-4b","task":"mmlu_hard","c":0.9636,"beta":0.0},{"model":"qwen3-4b","task":"arc","c":0.9923,"beta":0.0001},{"model":"qwen3-4b","task":"math500","c":0.7277,"beta":0.0148},{"model":"qwen3-8b","task":"gsm8k","c":0.7145,"beta":0.0},{"model":"qwen3-8b","task":"gsmhard","c":0.5798,"beta":0.0975},{"model":"qwen3-8b","task":"mmlu_hard","c":0.9352,"beta":0.0},{"model":"qwen3-8b","task":"arc","c":0.9873,"beta":0.0},{"model":"qwen3-8b","task":"math500","c":0.701,"beta":0.0},{"model":"qwen3.6-27b","task":"gsm8k","c":0.8811,"beta":0.0},{"model":"qwen3.6-27b","task":"gsmhard","c":0.8027,"beta":0.0233},{"model":"qwen3.6-27b","task":"mmlu_hard","c":0.8532,"beta":0.0},{"model":"qwen3.6-27b","task":"arc","c":1.0018,"beta":0.0038},{"model":"qwen3.6-27b","task":"math500","c":0.7321,"beta":0.0},{"model":"r1-distill-qwen-14b","task":"gsm8k","c":0.9464,"beta":0.0082},{"model":"r1-distill-qwen-14b","task":"gsmhard","c":0.7038,"beta":0.1395},{"model":"r1-distill-qwen-14b","task":"mmlu_hard","c":0.7361,"beta":0.0},{"model":"r1-distill-qwen-14b","task":"arc","c":0.9565,"beta":0.0},{"model":"r1-distill-qwen-14b","task":"math500","c":0.9209,"beta":0.0132},{"model":"smollm3-3b","task":"gsm8k","c":0.6405,"beta":0.0},{"model":"smollm3-3b","task":"gsmhard","c":0.5191,"beta":0.149},{"model":"smollm3-3b","task":"mmlu_hard","c":0.7516,"beta":0.0},{"model":"smollm3-3b","task":"arc","c":0.9306,"beta":0.0},{"model":"smollm3-3b","task":"math500","c":0.5239,"beta":0.0}],"excluded":["llama3.3-70b-awq","qwen2.5-72b-awq"]};
+
+/* ---------- shared helpers ---------- */
+const BLUE = ["#86b6ef","#6da7ec","#5598e7","#3987e5","#2a78d6","#256abf","#1c5cab","#184f95","#104281","#0d366b"];
+const lo = Math.log(3), hi = Math.log(27);
+function colorFor(p){
+  if(p==null) return "#8a8880";
+  const t = Math.max(0, Math.min(1, (Math.log(p)-lo)/(hi-lo)));
+  return BLUE[Math.round(t*(BLUE.length-1))];
+}
+const TASK_COLOR = {mmlu_hard:"#2a78d6", arc:"#eb6834", gsm8k:"#1baf7a",
+                    gsmhard:"#eda100", math500:"#e87ba4"};
+const byKey = Object.fromEntries(DATA.models.map(m=>[m.key,m]));
+const tip = document.getElementById("tip");
+function showTip(e, html){ tip.innerHTML = html; tip.style.opacity = 1;
+  tip.style.left = Math.min(e.clientX+13, innerWidth-tip.offsetWidth-10)+"px";
+  tip.style.top  = (e.clientY-34)+"px"; }
+function hideTip(){ tip.style.opacity = 0; }
+const svgEl = (n,a={})=>{const e=document.createElementNS("http://www.w3.org/2000/svg",n);
+  for(const k in a) e.setAttribute(k,a[k]); return e;};
+
+/* ---------- panel 1: N_eff vs N, faceted by task ---------- */
+const NMAX = 30;
+let yMax = 1;
+for(const m in DATA.neff) for(const t in DATA.neff[m])
+  for(const [,v] of DATA.neff[m][t]) if(v>yMax) yMax=v;
+yMax = Math.ceil(yMax)+1;
+
+const host = document.getElementById("neff");
+DATA.tasks.forEach(task=>{
+  const card = document.createElement("div"); card.className="card";
+  card.innerHTML = `<h3>${task.label}</h3>`;
+  const W=260,H=200,P={t:8,r:10,b:26,l:30};
+  const svg = svgEl("svg",{viewBox:`0 0 ${W} ${H}`,role:"img",
+                           "aria-label":`Effective team size versus nominal team size on ${task.label}`});
+  const X = n => P.l + (n/NMAX)*(W-P.l-P.r);
+  const Y = v => H-P.b - ((v-1)/(yMax-1))*(H-P.t-P.b);
+
+  svg.appendChild(svgEl("path",{class:"gap",
+    d:`M${X(1)},${Y(1)} L${X(NMAX)},${Y(Math.min(NMAX,yMax))} L${X(NMAX)},${Y(1)} Z`}));
+  svg.appendChild(svgEl("line",{class:"ideal",x1:X(1),y1:Y(1),
+    x2:X(Math.min(NMAX,yMax)),y2:Y(Math.min(NMAX,yMax))}));
+  svg.appendChild(svgEl("line",{class:"axis",x1:P.l,y1:H-P.b,x2:W-P.r,y2:H-P.b}));
+  svg.appendChild(svgEl("line",{class:"axis",x1:P.l,y1:P.t,x2:P.l,y2:H-P.b}));
+  [1,10,20,30].forEach(n=>{
+    const tx=svgEl("text",{class:"tick",x:X(n),y:H-P.b+12,"text-anchor":"middle"});
+    tx.textContent=n; svg.appendChild(tx);});
+  for(let v=1; v<=yMax; v+=Math.max(1,Math.round((yMax-1)/4))){
+    const ty=svgEl("text",{class:"tick",x:P.l-5,y:Y(v)+3,"text-anchor":"end"});
+    ty.textContent=v; svg.appendChild(ty);}
+  const xl=svgEl("text",{class:"alab",x:(P.l+W-P.r)/2,y:H-2,"text-anchor":"middle"});
+  xl.textContent="nominal N"; svg.appendChild(xl);
+
+  DATA.models.forEach(m=>{
+    const pts = (DATA.neff[m.key]||{})[task.key];
+    if(!pts||pts.length<2) return;
+    const d = pts.map(([n,v],i)=>`${i?"L":"M"}${X(n)},${Y(v)}`).join("");
+    const path = svgEl("path",{class:"ln",d,stroke:colorFor(m.params),"data-m":m.key});
+    path.addEventListener("mousemove",e=>{
+      focus(m.key);
+      const last = pts[pts.length-1];
+      showTip(e, `<b>${m.label}</b> &middot; ${task.label}<br>N=${last[0]} &rarr; N<sub>eff</sub>=${last[1].toFixed(1)}`);
+    });
+    path.addEventListener("mouseleave",()=>{focus(null);hideTip();});
+    svg.appendChild(path);
+  });
+  card.appendChild(svg); host.appendChild(card);
+});
+
+function focus(key){
+  document.querySelectorAll(".ln").forEach(p=>{
+    p.classList.toggle("dimmed", key && p.dataset.m!==key);
+    p.classList.toggle("hi",     key && p.dataset.m===key);
+  });
+  document.querySelectorAll(".chip[data-m]").forEach(c=>
+    c.classList.toggle("on", key && c.dataset.m===key));
+}
+
+const chips = document.getElementById("chips");
+DATA.models.forEach(m=>{
+  const c=document.createElement("span"); c.className="chip"; c.dataset.m=m.key;
+  c.innerHTML=`<span class="dot" style="background:${colorFor(m.params)}"></span>${m.label}`;
+  c.addEventListener("mouseenter",()=>focus(m.key));
+  c.addEventListener("mouseleave",()=>focus(null));
+  chips.appendChild(c);
+});
+
+/* ---------- panel 2: (c, beta) regime landscape ---------- */
+(function(){
+  const W=760,H=380,P={t:14,r:16,b:44,l:52};
+  const svg=svgEl("svg",{viewBox:`0 0 ${W} ${H}`,role:"img",
+    "aria-label":"Fitted ceiling parameter c against scaling exponent beta for every model and benchmark"});
+  const X=c=>P.l+c*(W-P.l-P.r), Y=b=>H-P.b-(b/1.15)*(H-P.t-P.b);
+  const band=(y0,y1,cls)=>svg.appendChild(svgEl("rect",
+    {class:cls,x:P.l,y:Y(y1),width:W-P.l-P.r,height:Y(y0)-Y(y1)}));
+  band(1.0,1.15,"band-lin"); band(0.05,1.0,"band-sub"); band(0,0.05,"band-sat");
+  [[1.07,"near-linear growth","#3a5a2a"],[0.55,"sublinear","#a07030"],
+   [0.022,"near-saturation","#a04040"]].forEach(([y,t,col])=>{
+    const e=svgEl("text",{class:"bandlab",x:P.l+8,y:Y(y)+4,fill:col}); e.textContent=t;
+    svg.appendChild(e);});
+  svg.appendChild(svgEl("line",{class:"axis",x1:P.l,y1:H-P.b,x2:W-P.r,y2:H-P.b}));
+  svg.appendChild(svgEl("line",{class:"axis",x1:P.l,y1:P.t,x2:P.l,y2:H-P.b}));
+  [0,.2,.4,.6,.8,1].forEach(c=>{const t=svgEl("text",
+    {class:"tick",x:X(c),y:H-P.b+14,"text-anchor":"middle"});t.textContent=c;svg.appendChild(t);});
+  [0,.2,.4,.6,.8,1].forEach(b=>{const t=svgEl("text",
+    {class:"tick",x:P.l-6,y:Y(b)+3,"text-anchor":"end"});t.textContent=b;svg.appendChild(t);});
+  const xl=svgEl("text",{class:"alab",x:(P.l+W-P.r)/2,y:H-8,"text-anchor":"middle"});
+  xl.textContent="c  (ceiling parameter)"; svg.appendChild(xl);
+  const yl=svgEl("text",{class:"alab",x:14,y:H/2,"text-anchor":"middle",
+    transform:`rotate(-90 14 ${H/2})`}); yl.textContent="\u03b2  (scaling exponent)";
+  svg.appendChild(yl);
+
+  DATA.fits.forEach(f=>{
+    const m=byKey[f.model]||{label:f.model};
+    const cir=svgEl("circle",{cx:X(f.c),cy:Y(f.beta),r:6,
+      fill:TASK_COLOR[f.task]||"#666",stroke:"#fff","stroke-width":1.4,opacity:.9});
+    cir.addEventListener("mousemove",e=>showTip(e,
+      `<b>${m.label}</b> &middot; ${(DATA.tasks.find(t=>t.key===f.task)||{}).label||f.task}` +
+      `<br>c=${f.c.toFixed(2)} &nbsp; \u03b2=${f.beta.toFixed(3)}`));
+    cir.addEventListener("mouseleave",hideTip);
+    svg.appendChild(cir);
+  });
+  document.getElementById("cb").appendChild(svg);
+
+  const tc=document.getElementById("tchips");
+  DATA.tasks.forEach(t=>{const c=document.createElement("span");c.className="chip";
+    c.innerHTML=`<span class="dot" style="background:${TASK_COLOR[t.key]}"></span>${t.label}`;
+    tc.appendChild(c);});
+})();
+
+/* ---------- headline stats ---------- */
+(function(){
+  const ends=[];
+  for(const m in DATA.neff) for(const t in DATA.neff[m]){
+    const p=DATA.neff[m][t]; if(p.length) ends.push(p[p.length-1][1]);}
+  const sat=DATA.fits.filter(f=>f.beta<0.05).length;
+  document.getElementById("s-models").textContent=DATA.models.length;
+  document.getElementById("s-cells").textContent=DATA.fits.length;
+  document.getElementById("s-span").textContent=
+    ends.length? `${Math.min(...ends).toFixed(1)}\u2013${Math.max(...ends).toFixed(1)}` : "\u2013";
+  document.getElementById("s-sat").textContent=
+    DATA.fits.length? Math.round(100*sat/DATA.fits.length)+"%" : "\u2013";
+  document.getElementById("excl").textContent=DATA.excluded.join(", ");
+})();
+
+/* ---------- table view ---------- */
+(function(){
+  const t=document.getElementById("tbl");
+  t.innerHTML="<thead><tr><th>Model</th><th>Size (B)</th><th>Benchmark</th>"+
+              "<th>c</th><th>\u03b2</th><th>N<sub>eff</sub> at N=30</th></tr></thead>";
+  const tb=document.createElement("tbody");
+  DATA.fits.slice().sort((a,b)=>
+    (byKey[a.model]?.params||0)-(byKey[b.model]?.params||0) || a.task.localeCompare(b.task)
+  ).forEach(f=>{
+    const m=byKey[f.model]||{label:f.model,params:null};
+    const pts=(DATA.neff[f.model]||{})[f.task];
+    const end=pts&&pts.length? pts[pts.length-1][1].toFixed(2) : "\u2013";
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${m.label}</td><td>${m.params??"\u2013"}</td>`+
+      `<td>${(DATA.tasks.find(x=>x.key===f.task)||{}).label||f.task}</td>`+
+      `<td>${f.c.toFixed(3)}</td><td>${f.beta.toFixed(3)}</td><td>${end}</td>`;
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb);
+})();
+</script>
+</body>
+</html>
