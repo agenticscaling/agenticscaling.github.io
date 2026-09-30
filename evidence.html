@@ -118,10 +118,6 @@
     <p><strong>Method.</strong> Debate condition (every agent sees all peers), final
     communication round, effective team size from the entropy of the team's answer
     distribution. Bars are means over 3 independent runs per cell.</p>
-    <p><strong>Excluded.</strong> <span id="excl"></span> &mdash; these have so far run only
-    one of the five benchmarks, too few to place beside models measured on all five.</p>
-    <p>Generated from the ILLUME Ringelmann sweep. Figures and source data are in the
-    project repository.</p>
   </footer>
 </main>
 <div id="tip"></div>
@@ -269,7 +265,6 @@ DATA.models.forEach(m=>{
     ends.length? `${Math.min(...ends).toFixed(1)}\u2013${Math.max(...ends).toFixed(1)}` : "\u2013";
   document.getElementById("s-sat").textContent=
     DATA.fits.length? Math.round(100*sat/DATA.fits.length)+"%" : "\u2013";
-  document.getElementById("excl").textContent=DATA.excluded.join(", ");
 })();
 
 /* ---------- table view ---------- */

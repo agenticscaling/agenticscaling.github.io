@@ -60,6 +60,24 @@
     },
     {
       "@type": "ScholarlyArticle",
+      "headline": "Multi-agent Scaling Across Disjunctive and Compensatory Tasks",
+      "url": "https://arxiv.org/abs/2609.31563",
+      "sameAs": "https://arxiv.org/abs/2609.31563",
+      "identifier": "arXiv:2609.31563",
+      "author": { "@id": "https://www.agenticscaling.ai/#org" },
+      "publisher": { "@id": "https://www.agenticscaling.ai/#org" }
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "headline": "An Exact Generate - Transform Decomposition of Small-LLM Team Scaling Across Orchestration Architectures",
+      "url": "https://arxiv.org/abs/2609.36104",
+      "sameAs": "https://arxiv.org/abs/2609.36104",
+      "identifier": "arXiv:2609.36104",
+      "author": { "@id": "https://www.agenticscaling.ai/#org" },
+      "publisher": { "@id": "https://www.agenticscaling.ai/#org" }
+    },
+    {
+      "@type": "ScholarlyArticle",
       "headline": "The Cost of Consensus: Isolated Self-Correction Prevails Over Unguided Homogeneous Multi-Agent Debate",
       "url": "https://dl.acm.org/doi/10.1145/3786335.3813137",
       "sameAs": "https://dl.acm.org/doi/10.1145/3786335.3813137",
@@ -388,7 +406,6 @@
 <section id="research">
   <div class="wrap">
     <div class="center">
-      <span class="eyebrow">Peer-reviewed research</span>
       <h2>The work behind the science.</h2>
       <p class="sub">Grounded in controlled, open-weight experiments across multiple model families
       and reasoning benchmarks — not anecdotes.</p>
@@ -417,6 +434,27 @@
         </ul>
         <div class="by">Main Research Track · <a class="evid" href="evidence.html">See it hold on 14 models →</a></div>
       </div>
+
+      <a class="paper" href="https://arxiv.org/abs/2609.31563" target="_blank" rel="noopener">
+        <div class="venuerow"><span class="venue">Preprint '26</span><span class="venue" style="text-transform:none">arXiv:2609.31563</span></div>
+        <h3>Multi-agent Scaling Across Disjunctive and Compensatory Tasks</h3>
+        <p>Brings Steiner's taxonomy of group tasks to multi-agent LLM scaling — 13 open-weight models, teams of up to 30 agents, on disjunctive and compensatory tasks.</p>
+        <ul>
+          <li>Disjunctive: the chance at least one agent is right grows 5–20 points, yet plurality voting realises almost none of it</li>
+          <li>Multi-round revision helps — but nearly as much with one peer as with 29</li>
+          <li>Fermi estimation: shared item-level bias is ~87% of the error, so averaging cuts it only ~6%</li>
+        </ul>
+      </a>
+      <a class="paper" href="https://arxiv.org/abs/2609.36104" target="_blank" rel="noopener">
+        <div class="venuerow"><span class="venue">Preprint '26</span><span class="venue" style="text-transform:none">arXiv:2609.36104</span></div>
+        <h3>An Exact Generate–Transform Decomposition of Small-LLM Team Scaling Across Orchestration Architectures</h3>
+        <p>Eight orchestration architectures, five 7–9B models, six benchmarks, up to 30 calls — with an exact split of every accuracy change into proposal coverage and downstream transform.</p>
+        <ul>
+          <li>From 3 to 30 calls: up to +17 points on arithmetic, at most +4 on ARC, GPQA and MMLU</li>
+          <li>Proposer–Critic scales steepest on arithmetic, but no architecture wins across tasks</li>
+          <li>At equal call budgets, token cost still varies 2.1×</li>
+        </ul>
+      </a>
 
       <div class="paper energy">
         <div class="energy-l">
